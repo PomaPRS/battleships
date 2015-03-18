@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MinWidth>1</MinWidth>
+  <MinHeight>1</MinHeight>
+  <MinGameCount>100</MinGameCount>
+  <MaxWidth>20</MaxWidth>
+  <MaxHeight>20</MaxHeight>
+  <MaxGameCount>100</MaxGameCount>
+  <CrashLimit>1</CrashLimit>
+  <MemoryLimit>200000000</MemoryLimit>
+  <RandomSeed>10</RandomSeed>
+  <TimeLimitSeconds>10</TimeLimitSeconds>
+</Settings>

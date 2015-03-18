@@ -13,19 +13,7 @@ namespace Battleships.AiTester
 		{
 			try
 			{
-				var settings = new Settings()
-				{
-					CrashLimit = 1,
-					MemoryLimit = 200000000,
-					TimeLimitSeconds = 10,
-					MinGameCount = 100,
-					MaxGameCount = 100,
-					MinWidth = 1,
-					MaxWidth = 20,
-					MinHeight = 1,
-					MaxHeight = 20
-				};
-
+				var settings = Settings.Deserialize();
 				var randomSeed = settings.RandomSeed;
 				var random = randomSeed.HasValue ? new Random(randomSeed.Value) : new Random();
 				var maps = GenerateMaps(random, settings);
