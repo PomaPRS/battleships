@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,19 +17,56 @@ namespace Battleships.AiTester
 				var settings = Settings.Deserialize();
 				var randomSeed = settings.RandomSeed;
 				var random = randomSeed.HasValue ? new Random(randomSeed.Value) : new Random();
-				var maps = GenerateMaps(random, settings);
 
-				Console.WriteLine("{0} {1}", maps[0].Width, maps[0].Height);
-				foreach (var shipSize in maps[0].GetShipSizes())
+				var aiCount = args.Count();
+				var scores = new double[aiCount];
+				for (int i = 0; i < settings.TestCount; i++)
 				{
-					Console.Write("{0} ", shipSize);
+					var maps = GenerateMaps(random, settings);
+
+					Console.WriteLine("Test #{0}", i + 1);
+					Console.WriteLine("Game Count: {0}", maps.Count);
+					Console.WriteLine("Width: {0}, Height: {1}", maps[0].Width, maps[0].Height);
+					Console.Write("Ships:");
+
+					foreach (var shipSize in maps[0].GetShipSizes())
+					{
+						Console.Write(" {0}", shipSize);
+					}
+					Console.WriteLine();
+
+					var aiTester = new Entities.AiTester(maps, settings);
+
+					var results = args.Select(aiTester.Run).ToList();
+					Console.WriteLine();
+					var testScores = WriteTotal(results, settings);
+
+					if (results.Any(x => x.BadShots.Sum() != 0 || x.CrashesCount != 0))
+					{
+						Console.WriteLine("Check");
+						Console.ReadLine();
+					}
+
+					for (int j = 0; j < aiCount; j++)
+					{
+						scores[j] += testScores[j];
+					}
 				}
-				Console.WriteLine();
 
-				var aiTester = new Entities.AiTester(maps, settings);
+				Console.WriteLine("Mean scores:");
+				var aiResults = Enumerable.Range(0, aiCount)
+					.Select(x => new
+					{
+						AiName = Path.GetFileNameWithoutExtension(args[x]),
+						MeanScores = scores[x]/settings.TestCount
+					})
+					.OrderByDescending(x => x.MeanScores)
+					.ToList();
 
-				var results = args.Select(aiTester.Run).ToList();
-				WriteTotal(results, settings);
+				foreach (var aiResult in aiResults)
+				{
+					Console.WriteLine("{0}:\t{1}", aiResult.AiName, aiResult.MeanScores);
+				}
 			}
 			catch (Exception e)
 			{
@@ -79,20 +117,24 @@ namespace Battleships.AiTester
 			return shipSizes;
 		}
 
-		private static void WriteTotal(List<TestResult> results, Settings settings)
+		private static List<double> WriteTotal(List<TestResult> results, Settings settings)
 		{
 			var headers = FormatTableRow(new object[] { "AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Games", "Score" });
 			Console.WriteLine("Score statistics");
 			Console.WriteLine("================");
 			Console.WriteLine(headers);
+			var scores = new List<double>();
 			foreach (var result in results)
 			{
-				WriteTotal(result, settings);
+				scores.Add(WriteTotal(result, settings));
 			}
 			Console.WriteLine();
+			Console.WriteLine("================================================");
+			Console.WriteLine();
+			return scores;
 		}
 
-		private static void WriteTotal(TestResult result, Settings settings)
+		private static double WriteTotal(TestResult result, Settings settings)
 		{
 			var aiName = result.AiName;
 			var width = result.MapWidth;
@@ -113,6 +155,7 @@ namespace Battleships.AiTester
 			var score = efficiencyScore - crashPenalty - badFraction;
 			var message = FormatTableRow(new object[] { aiName, mean, sigma, median, crashes, badFraction, gamesPlayed, score });
 			Console.WriteLine(message);
+			return score;
 		}
 
 		private static string FormatTableRow(object[] values)

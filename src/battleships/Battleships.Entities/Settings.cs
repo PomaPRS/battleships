@@ -13,6 +13,7 @@ namespace Battleships.Entities
 	{
 		private const string DefaultCfgFileName = "battleships.cfg.xml";
 
+		public int TestCount { get; set; }
 		public int MinWidth { get; set; }
 		public int MinHeight { get; set; }
 		public int MinGameCount { get; set; }
