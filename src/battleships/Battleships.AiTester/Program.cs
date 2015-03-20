@@ -11,6 +11,7 @@ namespace Battleships.AiTester
 		{
 			try
 			{
+				var testsLogger = new MyLogger("tests");
 				var aiPaths = args;
 				var settings = Settings.Deserialize();
 				var randomSeed = settings.RandomSeed;
@@ -21,9 +22,11 @@ namespace Battleships.AiTester
 				{
 					Console.WriteLine();
 					Console.WriteLine("Test #{0}", i + 1);
+
 					var testGenerator = new TestGenerator(random, settings);
 					var test = testGenerator.GenerateTest();
-					
+
+					testsLogger.Log(test, i + 1);
 					WriteTestInfo(test);
 					var results = test.Run(aiPaths);
 					testResults.AddRange(results);

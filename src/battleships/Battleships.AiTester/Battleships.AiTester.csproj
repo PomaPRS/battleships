@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +50,7 @@
     <Compile Include="Entities\GameResult.cs" />
     <Compile Include="Entities\Map.cs" />
     <Compile Include="Entities\MapGenerator.cs" />
+    <Compile Include="Entities\MyLogger.cs" />
     <Compile Include="Entities\ProcessMonitor.cs" />
     <Compile Include="Entities\Settings.cs" />
     <Compile Include="Entities\Ship.cs" />
@@ -62,6 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\settings\battleships.cfg.xml">
