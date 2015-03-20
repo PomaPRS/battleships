@@ -39,12 +39,13 @@ namespace Battleships.Entities
 			return !Map.HasAliveShips() || AiCrashed;
 		}
 
-		public void RunToEnd()
+		public GameResult RunToEnd()
 		{
 			while (!IsOver())
 			{
 				MakeStep();
 			}
+			return new GameResult(ShotsCount, BadShotsCount, TurnsCount, AiCrashed);
 		}
 
 		public void MakeStep()

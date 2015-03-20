@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 
@@ -8,31 +9,26 @@ namespace Battleships.Entities
 	{
 		private readonly Settings settings;
 		private readonly ProcessMonitor monitor;
-		private readonly List<Map> maps;
+		private readonly Test test;
 
-		public AiTester(List<Map> maps, Settings settings)
+		public AiTester(Test test, Settings settings)
 		{
-			this.maps = maps;
+			this.test = test;
 			this.settings = settings;
-			monitor = new ProcessMonitor(TimeSpan.FromSeconds(settings.TimeLimitSeconds*maps.Count), settings.MemoryLimit);
+			var timeLimit = TimeSpan.FromSeconds(settings.TimeLimitSeconds*test.GamesCount);
+			monitor = new ProcessMonitor(timeLimit, settings.MemoryLimit);
 		}
 
 		public TestResult Run(string exeFilePath)
 		{
 			var ai = new Ai(exeFilePath, monitor);
+			var gameResults = new List<GameResult>();
 			var crashesCount = 0;
-			var playedGamesCount = 0;
-			var shots = new List<int>();
-			var badShots = new List<int>();
-			var turns = new List<int>();
 			
-			foreach (var map in maps)
+			foreach (var map in test.Maps)
 			{
 				var game = new Game(new Map(map), ai);
-				game.RunToEnd();
-				playedGamesCount++;
-				badShots.Add(game.BadShotsCount);
-				shots.Add(game.ShotsCount);
+				gameResults.Add(game.RunToEnd());
 
 				if (game.AiCrashed)
 				{
@@ -41,22 +37,11 @@ namespace Battleships.Entities
 						break;
 					ai = new Ai(exeFilePath, monitor);
 				}
-				else
-					turns.Add(game.TurnsCount);
 			}
 			ai.Dispose();
 
-			return new TestResult
-			{
-				AiName = Path.GetFileNameWithoutExtension(exeFilePath),
-				MapWidth = maps[0].Width,
-				MapHeight = maps[0].Height,
-				BadShots = badShots,
-				CrashesCount = crashesCount,
-				PlayedGamesCount = playedGamesCount,
-				Shots = shots,
-				Turns = turns
-			};
+			var aiName = Path.GetFileNameWithoutExtension(exeFilePath);
+			return new TestResult(test.MapWidth, test.MapHeight, aiName, test.GamesCount, settings, gameResults.ToArray());
 		}
 	}
 }

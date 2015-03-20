@@ -3,10 +3,10 @@
   <TestCount>10</TestCount>
   <MinWidth>1</MinWidth>
   <MinHeight>1</MinHeight>
-  <MinGameCount>100</MinGameCount>
+  <MinGameCount>1</MinGameCount>
   <MaxWidth>20</MaxWidth>
   <MaxHeight>20</MaxHeight>
-  <MaxGameCount>100</MaxGameCount>
+  <MaxGameCount>10</MaxGameCount>
   <CrashLimit>1</CrashLimit>
   <MemoryLimit>200000000</MemoryLimit>
   <RandomSeed>10</RandomSeed>
