@@ -49,7 +49,7 @@ namespace Battleships.AiTester
 			Console.WriteLine("Height: {0}", test.MapWidth);
 			Console.Write("Ships:");
 
-			foreach (var shipSize in test.ShipSizes)
+			foreach (var shipSize in test.ShipSizes.OrderBy(x => x))
 			{
 				Console.Write(" {0}", shipSize);
 			}

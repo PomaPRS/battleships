@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Battleships.AiTester.Entities
@@ -25,7 +26,7 @@ namespace Battleships.AiTester.Entities
 		public void Serialize(string cfgFileName = DefaultCfgFileName)
 		{
 			var xml = new XmlSerializer(typeof(Settings));
-			using (var sw = new StreamWriter(cfgFileName))
+			using (var sw = new StreamWriter(GetFilePath(cfgFileName)))
 			{
 				xml.Serialize(sw, this);
 			}
@@ -34,10 +35,20 @@ namespace Battleships.AiTester.Entities
 		public static Settings Deserialize(string cfgFileName = DefaultCfgFileName)
 		{
 			var xml = new XmlSerializer(typeof(Settings));
-			using (var sr = new StreamReader(cfgFileName))
+			using (var sr = new StreamReader(GetFilePath(cfgFileName)))
 			{
 				return (Settings)xml.Deserialize(sr);
 			}
+		}
+
+		private static string GetFilePath(string fileName)
+		{
+			string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+			// Note RelativeSearchPath can be null even if the doc say something else; don't remove the check
+			var searchPath = AppDomain.CurrentDomain.RelativeSearchPath ?? string.Empty;
+			string relativeSearchPath = searchPath.Split(';').First();
+			string binPath = Path.Combine(baseDir, relativeSearchPath);
+			return Path.Combine(binPath, fileName);
 		}
 	}
 }
