@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Battleships.Entities.Enums;
 
-namespace Battleships.Entities
+namespace Battleships.AiTester.Entities
 {
 	public class Map
 	{

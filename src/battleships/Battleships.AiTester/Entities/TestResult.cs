@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Battleships.Entities
+namespace Battleships.AiTester.Entities
 {
 	public class TestResult
 	{

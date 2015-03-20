@@ -41,17 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Ai.cs" />
+    <Compile Include="Entities\AiTester.cs" />
+    <Compile Include="Entities\Game.cs" />
+    <Compile Include="Entities\GameResult.cs" />
+    <Compile Include="Entities\Map.cs" />
+    <Compile Include="Entities\MapGenerator.cs" />
+    <Compile Include="Entities\ProcessMonitor.cs" />
+    <Compile Include="Entities\Settings.cs" />
+    <Compile Include="Entities\Ship.cs" />
+    <Compile Include="Entities\Statistics.cs" />
+    <Compile Include="Entities\Test.cs" />
+    <Compile Include="Entities\TestGenerator.cs" />
+    <Compile Include="Entities\TestResult.cs" />
+    <Compile Include="Entities\Vector.cs" />
+    <Compile Include="Enums\MapCell.cs" />
+    <Compile Include="Enums\ShotResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Battleships.Entities\Battleships.Entities.csproj">
-      <Project>{ec6e1a71-24a7-4d02-87a7-1c14e7a050f8}</Project>
-      <Name>Battleships.Entities</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\settings\battleships.cfg.xml">

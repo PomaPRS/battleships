@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Battleships.Entities
+namespace Battleships.AiTester.Entities
 {
 	public class Test
 	{
@@ -31,7 +28,7 @@ namespace Battleships.Entities
 
 		public List<TestResult> Run(params string[] aiPaths)
 		{
-			var aiTester = new AiTester(this, settings);
+			var aiTester = new Battleships.AiTester.Entities.AiTester(this, settings);
 			return aiPaths.Select(aiTester.Run).ToList();
 		}
 	}

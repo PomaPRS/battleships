@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Battleships.Entities.Enums;
 
-namespace Battleships.Entities
+namespace Battleships.AiTester.Entities
 {
 	public class Ai
 	{

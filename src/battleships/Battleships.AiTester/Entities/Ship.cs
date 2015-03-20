@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 
-namespace Battleships.Entities
+namespace Battleships.AiTester.Entities
 {
 	public enum Direction
 	{
