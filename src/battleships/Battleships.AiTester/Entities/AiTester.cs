@@ -40,7 +40,7 @@ namespace Battleships.AiTester.Entities
 			ai.Dispose();
 
 			var aiName = Path.GetFileNameWithoutExtension(exeFilePath);
-			return new TestResult(test.MapWidth, test.MapHeight, aiName, test.GamesCount, settings, gameResults.ToArray());
+			return new TestResult(aiName, test, settings, gameResults.ToArray());
 		}
 	}
 }

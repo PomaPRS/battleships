@@ -8,20 +8,16 @@ namespace Battleships.AiTester.Entities
 	{
 		private Settings settings;
 		
-		public TestResult(int mapWidth, int mapHeight, string aiName, int gamesPlayed, Settings settings, params GameResult[] gameResults)
+		public TestResult(string aiName, Test test, Settings settings, params GameResult[] gameResults)
 		{
-			MapWidth = mapWidth;
-			MapHeight = mapHeight;
 			AiName = aiName;
-			GamesPlayed = gamesPlayed;
+			Test = test;
 			GameResults = gameResults.ToList();
 			this.settings = settings;
 		}
 
-		public int MapWidth { get; private set; }
-		public int MapHeight { get; private set; }
+		public Test Test { get; private set; }
 		public string AiName { get; private set; }
-		public int GamesPlayed { get; private set; }
 		public List<GameResult> GameResults { get; private set; }
 
 		public Statistics GetStatistics()
@@ -34,7 +30,7 @@ namespace Battleships.AiTester.Entities
 				Median = GetShotsMedian(),
 				CrashesCount = GetCrashesCount(),
 				BadFraction = GetBadFraction(),
-				GamesPlayed = GamesPlayed,
+				GamesPlayed = Test.GamesCount,
 				Score = GetScore()
 			};
 		}
@@ -46,7 +42,7 @@ namespace Battleships.AiTester.Entities
 
 		public double GetEfficiencyScore()
 		{
-			return 100.0*(MapWidth*MapHeight- GetShotsMean())/(MapWidth*MapHeight);
+			return 100.0*(Test.MapWidth*Test.MapHeight- GetShotsMean())/(Test.MapWidth*Test.MapHeight);
 		}
 
 		public double GetCrashPenalty()

@@ -7,8 +7,9 @@ namespace Battleships.AiTester.Entities
 	{
 		private Settings settings;
 
-		public Test(int mapWidth, int mapHeight, List<int> shipSizes, Settings settings, params Map[] maps)
+		public Test(int testNumber, int mapWidth, int mapHeight, List<int> shipSizes, Settings settings, params Map[] maps)
 		{
+			TestNumber = testNumber;
 			ShipSizes = shipSizes;
 			Maps = maps.ToList();
 			MapHeight = mapHeight;
@@ -16,6 +17,7 @@ namespace Battleships.AiTester.Entities
 			this.settings = settings;
 		}
 
+		public int TestNumber { get; private set; }
 		public int MapWidth { get; private set; }
 		public int MapHeight { get; private set; }
 		public List<int> ShipSizes { get; private set; }
@@ -28,7 +30,7 @@ namespace Battleships.AiTester.Entities
 
 		public List<TestResult> Run(params string[] aiPaths)
 		{
-			var aiTester = new Battleships.AiTester.Entities.AiTester(this, settings);
+			var aiTester = new AiTester(this, settings);
 			return aiPaths.Select(aiTester.Run).ToList();
 		}
 	}

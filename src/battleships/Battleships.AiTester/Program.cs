@@ -17,15 +17,14 @@ namespace Battleships.AiTester
 				var randomSeed = settings.RandomSeed;
 				var random = randomSeed.HasValue ? new Random(randomSeed.Value) : new Random();
 				var testResults = new List<TestResult>();
+				var testGenerator = new TestGenerator(random, settings);
 
 				for (int i = 0; i < settings.TestCount; i++)
 				{
 					Console.WriteLine();
 					Console.WriteLine("Test #{0}", i + 1);
 
-					var testGenerator = new TestGenerator(random, settings);
 					var test = testGenerator.GenerateTest();
-
 					testsLogger.Log(test, i + 1);
 					WriteTestInfo(test);
 					var results = test.Run(aiPaths);
@@ -58,16 +57,30 @@ namespace Battleships.AiTester
 
 		private static void WriteTotal(List<TestResult> results, Settings settings)
 		{
-			var headers = FormatTableRow(new object[] { "AiName", "TotalScore", "MeanScores" }, 10);
+			var headers = FormatTableRow(new object[] { "AiName", "TotalScore", "MeanScores", "Wins" }, 10);
 			Console.WriteLine();
 			Console.WriteLine("Total results:");
 			Console.WriteLine("==============");
 			Console.WriteLine(headers);
+			
+			var winCounts = results
+				.GroupBy(x => x.Test.TestNumber)
+				.SelectMany(x =>
+				{
+					var scores = x.Select(v => new { v.AiName, Score = v.GetScore() }).ToList();
+					var scoreMax = scores.Max(v => v.Score);
+					return scores
+						.Where(v => Math.Abs(v.Score - scoreMax) < 1e-5)
+						.Select(v => new { TestNumber = x.Key, v.AiName });
+				})
+				.GroupBy(x => x.AiName)
+				.ToDictionary(x => x.Key, x => x.Count());
 
 			var aiResults = results.GroupBy(x => x.AiName)
 				.Select(x => new
 				{
 					AiName = x.Key,
+					WinCount = winCounts.ContainsKey(x.Key) ? winCounts[x.Key] : 0,
 					TotalScore = x.Sum(v => v.GetScore())
 				})
 				.OrderByDescending(x => x.TotalScore);
@@ -79,7 +92,8 @@ namespace Battleships.AiTester
 				{
 					aiResult.AiName,
 					aiResult.TotalScore,
-					meanScores
+					meanScores,
+					aiResult.WinCount
 				}, 10);
 				Console.WriteLine(message);
 			}
