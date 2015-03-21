@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Battleships.AiTester.Entities;
+using NLog;
 
 namespace Battleships.AiTester
 {
@@ -9,9 +10,11 @@ namespace Battleships.AiTester
 	{
 		static void Main(string[] args)
 		{
+			var testsLogger = new TestLogger("tester-tests");
+			var resultsLogger = LogManager.GetLogger("tester-results");
+
 			try
 			{
-				var testsLogger = new MyLogger("tests");
 				var aiPaths = args;
 				var settings = Settings.Deserialize();
 				var randomSeed = settings.RandomSeed;
@@ -23,46 +26,55 @@ namespace Battleships.AiTester
 				{
 					Console.WriteLine();
 					Console.WriteLine("Test #{0}", i + 1);
+					resultsLogger.Info("");
+					resultsLogger.Info("Test #{0}", i + 1);
 
 					var test = testGenerator.GenerateTest();
-					testsLogger.Log(test, i + 1);
-					WriteTestInfo(test);
+					testsLogger.Log(test);
+					WriteTestInfo(test, resultsLogger);
+
 					var results = test.Run(aiPaths);
 					testResults.AddRange(results);
 
 					var statistics = results.Select(x => x.GetStatistics()).ToList();
-					WriteTestResult(statistics);
+					WriteTestResult(statistics, resultsLogger);
 				}
-				WriteTotal(testResults, settings);
+				WriteTotal(testResults, settings, resultsLogger);
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
+				resultsLogger.Error(e);
+				Console.WriteLine(e);
 			}
 		}
 
-		private static void WriteTestInfo(Test test)
+		private static void WriteTestInfo(Test test, Logger resultsLogger)
 		{
+			var shipSizes = test.ShipSizes.Aggregate("Ships: ", (a, b) => a + " " + b);
 			Console.WriteLine("Game Count: {0}", test.GamesCount);
 			Console.WriteLine("Width: {0}", test.MapWidth);
-			Console.WriteLine("Height: {0}", test.MapWidth);
-			Console.Write("Ships:");
-
-			foreach (var shipSize in test.ShipSizes.OrderBy(x => x))
-			{
-				Console.Write(" {0}", shipSize);
-			}
+			Console.WriteLine("Height: {0}", test.MapHeight);
+			Console.Write(shipSizes);
 			Console.WriteLine();
+			resultsLogger.Info("Game Count: {0}", test.GamesCount);
+			resultsLogger.Info("Width: {0}", test.MapWidth);
+			resultsLogger.Info("Height: {0}", test.MapHeight);
+			resultsLogger.Info(shipSizes);
+			resultsLogger.Info("");
 		}
 
-		private static void WriteTotal(List<TestResult> results, Settings settings)
+		private static void WriteTotal(List<TestResult> results, Settings settings, Logger resultsLogger)
 		{
 			var headers = FormatTableRow(new object[] { "AiName", "TotalScore", "MeanScores", "Wins" }, 10);
 			Console.WriteLine();
 			Console.WriteLine("Total results:");
 			Console.WriteLine("==============");
 			Console.WriteLine(headers);
-			
+			resultsLogger.Info("");
+			resultsLogger.Info("Total results:");
+			resultsLogger.Info("==============");
+			resultsLogger.Info(headers);
+
 			var winCounts = results
 				.GroupBy(x => x.Test.TestNumber)
 				.SelectMany(x =>
@@ -96,22 +108,31 @@ namespace Battleships.AiTester
 					aiResult.WinCount
 				}, 10);
 				Console.WriteLine(message);
+				resultsLogger.Info(message);
 			}
+			resultsLogger.Info("************************************************************");
 		}
 
-		private static void WriteTestResult(List<Statistics> results)
+		private static void WriteTestResult(List<Statistics> results, Logger resultsLogger)
 		{
 			var headers = FormatTableRow(new object[] {"AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Score"}, 7);
 			Console.WriteLine();
 			Console.WriteLine("Score statistics");
 			Console.WriteLine("================");
 			Console.WriteLine(headers);
+			resultsLogger.Info("");
+			resultsLogger.Info("Score statistics");
+			resultsLogger.Info("================");
+			resultsLogger.Info(headers);
+
 			foreach (var result in results.OrderByDescending(x => x.Score))
 			{
-				WriteTestResult(result);
+				WriteTestResult(result, resultsLogger);
 			}
 			Console.WriteLine();
 			Console.WriteLine("---------------------------------------------------------------");
+			resultsLogger.Info("");
+			resultsLogger.Info("---------------------------------------------------------------");
 
 			if (results.Any(x => x.BadFraction > 0 || x.CrashesCount != 0))
 			{
@@ -120,7 +141,7 @@ namespace Battleships.AiTester
 			}
 		}
 
-		private static void WriteTestResult(Statistics result)
+		private static void WriteTestResult(Statistics result, Logger resultsLogger)
 		{
 			var message = FormatTableRow(new object[]
 			{
@@ -133,6 +154,7 @@ namespace Battleships.AiTester
 				result.Score
 			}, 7);
 			Console.WriteLine(message);
+			resultsLogger.Info(message);
 		}
 
 		private static string FormatTableRow(object[] values, int cellSize)

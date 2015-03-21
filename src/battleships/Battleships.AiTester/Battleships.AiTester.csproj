@@ -50,11 +50,12 @@
     <Compile Include="Entities\GameResult.cs" />
     <Compile Include="Entities\Map.cs" />
     <Compile Include="Entities\MapGenerator.cs" />
-    <Compile Include="Entities\MyLogger.cs" />
+    <Compile Include="Entities\TestLogger.cs" />
     <Compile Include="Entities\ProcessMonitor.cs" />
     <Compile Include="Entities\Settings.cs" />
     <Compile Include="Entities\Ship.cs" />
     <Compile Include="Entities\Statistics.cs" />
+    <Compile Include="Entities\StrategyLogManager.cs" />
     <Compile Include="Entities\Test.cs" />
     <Compile Include="Entities\TestGenerator.cs" />
     <Compile Include="Entities\TestResult.cs" />

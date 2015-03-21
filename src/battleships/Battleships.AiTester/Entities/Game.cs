@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Battleships.Entities.Enums;
+using NLog;
+using NLog.Fluent;
 
 namespace Battleships.AiTester.Entities
 {
@@ -13,6 +15,7 @@ namespace Battleships.AiTester.Entities
 	public class Game
 	{
 		private readonly Ai ai;
+		private readonly Logger logger;
 
 		public Game(Map map, Ai ai)
 		{
@@ -21,6 +24,7 @@ namespace Battleships.AiTester.Entities
 			TurnsCount = 0;
 			BadShotsCount = 0;
 			ShotsCount = 0;
+			logger = StrategyLogManager.GetLogger(ai.Name);
 		}
 
 		public Vector LastTarget { get; private set; }
@@ -86,6 +90,8 @@ namespace Battleships.AiTester.Entities
 			}
 			catch (Exception e)
 			{
+				logger.Info("Ai crashed");
+				logger.Error(e);
 				AiCrashed = true;
 				LastError = e;
 				return false;

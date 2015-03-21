@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Battleships.Entities.Enums;
 using NLog;
 
 namespace Battleships.AiTester.Entities
 {
-	public class MyLogger
+	public class TestLogger
 	{
 		private Logger logger;
 
-		public MyLogger(string name)
+		public TestLogger(string name)
 		{
 			logger = LogManager.GetLogger(name);
 		}
 
-		public void Log(Test test, int testNumber)
+		public void Log(Test test)
 		{
 			var shipSizes = test.ShipSizes.Aggregate("Ships: ", (a, b) => a + " " + b);
-			logger.Info("Test #{0}", testNumber);
+			logger.Info("Test #{0}", test.TestNumber);
 			logger.Info("Game Count: {0}", test.GamesCount);
 			logger.Info("Width: {0}", test.MapWidth);
-			logger.Info("Height: {0}", test.MapWidth);
+			logger.Info("Height: {0}", test.MapHeight);
 			logger.Info(shipSizes);
 
 			for (int i = 0; i < test.Maps.Count; i++)

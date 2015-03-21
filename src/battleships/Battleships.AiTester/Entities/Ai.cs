@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Battleships.Entities.Enums;
+using NLog;
+using NLog.Fluent;
 
 namespace Battleships.AiTester.Entities
 {
@@ -11,11 +13,13 @@ namespace Battleships.AiTester.Entities
 		private Process process;
 		private readonly string exePath;
 		private readonly ProcessMonitor monitor;
+		private readonly Logger logger;
 
 		public Ai(string exePath, ProcessMonitor monitor)
 		{
 			this.exePath = exePath;
 			this.monitor = monitor;
+			logger = StrategyLogManager.GetLogger(Name);
 		}
 
 		public string Name
@@ -39,6 +43,7 @@ namespace Battleships.AiTester.Entities
 		private void SendMessage(string messageFormat, params object[] args)
 		{
 			var message = string.Format(messageFormat, args);
+			logger.Info(message);
 			process.StandardInput.WriteLine(message);
 		}
 
@@ -85,6 +90,8 @@ namespace Battleships.AiTester.Entities
 				{
 					var err = process.StandardError.ReadToEnd();
 					Console.WriteLine(err);
+					logger.Info("No ai output");
+					logger.Error(err);
 					throw new Exception("No ai output");
 				}
 			}
@@ -95,6 +102,8 @@ namespace Battleships.AiTester.Entities
 			try
 			{
 				var parts = output.Split(' ').Select(int.Parse).ToList();
+				var message = string.Format("Hit {0} {1}", parts[0], parts[1]);
+				logger.Info(message);
 				return new Vector(parts[0], parts[1]);
 			}
 			catch (Exception e)

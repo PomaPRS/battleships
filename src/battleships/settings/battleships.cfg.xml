@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TestCount>10</TestCount>
-  <MinWidth>1</MinWidth>
-  <MinHeight>1</MinHeight>
-  <MinGameCount>1</MinGameCount>
-  <MaxWidth>20</MaxWidth>
-  <MaxHeight>20</MaxHeight>
-  <MaxGameCount>10</MaxGameCount>
+  <MinWidth>10</MinWidth>
+  <MinHeight>10</MinHeight>
+  <MinGameCount>2</MinGameCount>
+  <MaxWidth>10</MaxWidth>
+  <MaxHeight>10</MaxHeight>
+  <MaxGameCount>2</MaxGameCount>
   <CrashLimit>1</CrashLimit>
   <MemoryLimit>200000000</MemoryLimit>
+  <!-- 
   <RandomSeed>10</RandomSeed>
+  -->
   <TimeLimitSeconds>10</TimeLimitSeconds>
 </Settings>

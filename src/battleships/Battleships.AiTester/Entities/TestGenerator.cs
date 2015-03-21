@@ -18,6 +18,7 @@ namespace Battleships.AiTester.Entities
 
 		public Test GenerateTest()
 		{
+			testGenerated ++;
 			Test test;
 			int mapCount;
 			do
@@ -44,7 +45,7 @@ namespace Battleships.AiTester.Entities
 				if (map != null)
 					maps.Add(map);
 			}
-			return new Test(testGenerated++, width, height, shipSizes, settings, maps.ToArray());
+			return new Test(testGenerated, width, height, shipSizes, settings, maps.ToArray());
 		}
 
 		private List<int> GenerateShipSizes(int maxShipCount, int maxShipSize, Random random)

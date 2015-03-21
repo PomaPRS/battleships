@@ -31,7 +31,7 @@ namespace Battleships.AiTester.Entities
 		public List<TestResult> Run(params string[] aiPaths)
 		{
 			var aiTester = new AiTester(this, settings);
-			return aiPaths.Select(aiTester.Run).ToList();
+			return aiPaths.AsParallel().Select(aiTester.Run).AsSequential().ToList();
 		}
 	}
 }
