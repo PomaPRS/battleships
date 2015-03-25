@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Battleships.Entities.Enums;
 using NLog;
-using NLog.Fluent;
 
 namespace Battleships.AiTester.Entities
 {
@@ -25,6 +24,16 @@ namespace Battleships.AiTester.Entities
 		public string Name
 		{
 			get { return Path.GetFileNameWithoutExtension(exePath); }
+		}
+
+		public TimeSpan TotalProcessorTime
+		{
+			get
+			{
+				if (process == null)
+					return TimeSpan.FromTicks(0);
+				return process.TotalProcessorTime;
+			}
 		}
 
 		public Vector Init(int width, int height, int[] shipSizes)

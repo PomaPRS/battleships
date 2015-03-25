@@ -115,7 +115,7 @@ namespace Battleships.AiTester
 
 		private static void WriteTestResult(List<Statistics> results, Logger resultsLogger)
 		{
-			var headers = FormatTableRow(new object[] {"AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Score"}, 7);
+			var headers = FormatTableRow(new object[] {"AiName", "Mean", "Sigma", "Median", "Crashes", "Bad%", "Score", "Time"}, 7);
 			Console.WriteLine();
 			Console.WriteLine("Score statistics");
 			Console.WriteLine("================");
@@ -151,7 +151,8 @@ namespace Battleships.AiTester
 				result.Median,
 				result.CrashesCount,
 				result.BadFraction,
-				result.Score
+				result.Score,
+				string.Format("{0:00}.{1}", result.TotalProcessorTime.TotalSeconds, result.TotalProcessorTime.Milliseconds)
 			}, 7);
 			Console.WriteLine(message);
 			resultsLogger.Info(message);

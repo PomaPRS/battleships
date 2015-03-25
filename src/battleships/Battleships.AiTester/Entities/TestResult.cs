@@ -31,8 +31,14 @@ namespace Battleships.AiTester.Entities
 				CrashesCount = GetCrashesCount(),
 				BadFraction = GetBadFraction(),
 				GamesPlayed = Test.GamesCount,
-				Score = GetScore()
+				Score = GetScore(),
+				TotalProcessorTime = GetTotalProcessorTime()
 			};
+		}
+
+		private TimeSpan GetTotalProcessorTime()
+		{
+			return GameResults.Aggregate(new TimeSpan(), (a, b) => a + b.TotalProcessorTime);
 		}
 
 		public double GetScore()

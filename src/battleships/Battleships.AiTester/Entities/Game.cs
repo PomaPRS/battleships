@@ -44,11 +44,13 @@ namespace Battleships.AiTester.Entities
 
 		public GameResult RunToEnd()
 		{
+			var startTime = ai.TotalProcessorTime;
 			while (!IsOver())
 			{
 				MakeStep();
 			}
-			return new GameResult(ShotsCount, BadShotsCount, TurnsCount, AiCrashed);
+			var exitTime = ai.TotalProcessorTime;
+			return new GameResult(ShotsCount, BadShotsCount, TurnsCount, AiCrashed, exitTime - startTime);
 		}
 
 		public void MakeStep()

@@ -44,7 +44,7 @@ namespace Battleships.AiTester.Entities
 					{
 						foreach (var process in processes.ToList()) Inspect(process);
 					}
-					Thread.Sleep(500);
+					Thread.Sleep(100);
 				}
 				// ReSharper disable once FunctionNeverReturns
 			})
@@ -64,15 +64,18 @@ namespace Battleships.AiTester.Entities
 
 		private void Inspect(Process process)
 		{
-			if (process.HasExited)
+			try
+			{
+				var totalProcessorTime = process.TotalProcessorTime;
+				var peakWorkingSet64 = process.PeakWorkingSet64;
+
+				CheckParameter(totalProcessorTime, timeLimit, process, "TimeLimit");
+				CheckParameter(peakWorkingSet64, memoryLimit, process, "MemoryLimit");
+			}
+			catch (InvalidOperationException)
 			{
 				TotalProcessesTime += process.ExitTime - process.StartTime;
 				processes.Remove(process);
-			}
-			else
-			{
-				CheckParameter(process.TotalProcessorTime, timeLimit, process, "TimeLimit");
-				CheckParameter(process.PeakWorkingSet64, memoryLimit, process, "MemoryLimit");
 			}
 		}
 

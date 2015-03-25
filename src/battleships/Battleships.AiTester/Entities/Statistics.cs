@@ -1,4 +1,6 @@
-﻿namespace Battleships.AiTester.Entities
+﻿using System;
+
+namespace Battleships.AiTester.Entities
 {
 	public class Statistics
 	{
@@ -10,5 +12,6 @@
 		public double BadFraction { get; set; }
 		public int GamesPlayed { get; set; }
 		public double Score { get; set; }
+		public TimeSpan TotalProcessorTime { get; set; }
 	}
 }
