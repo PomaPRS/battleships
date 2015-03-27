@@ -54,7 +54,7 @@ namespace Battleships.AiTester.Entities
 			var shipSizes = new List<int>();
 			for (int i = 0; i < shipCount; i++)
 			{
-				var size = random.Next(1, maxShipSize);
+				var size = random.Next(settings.MinShipSize, maxShipSize);
 				shipSizes.Add(size);
 			}
 			return shipSizes;

@@ -4,6 +4,7 @@
   <MinWidth>10</MinWidth>
   <MinHeight>10</MinHeight>
   <MinGameCount>2</MinGameCount>
+  <MinShipSize>1</MinShipSize>
   <MaxWidth>10</MaxWidth>
   <MaxHeight>10</MaxHeight>
   <MaxGameCount>2</MaxGameCount>

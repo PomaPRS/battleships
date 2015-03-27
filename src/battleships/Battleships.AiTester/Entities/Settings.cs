@@ -14,6 +14,7 @@ namespace Battleships.AiTester.Entities
 		public int MinWidth { get; set; }
 		public int MinHeight { get; set; }
 		public int MinGameCount { get; set; }
+		public int MinShipSize { get; set; }
 		public int MaxWidth { get; set; }
 		public int MaxHeight { get; set; }
 		public int MaxGameCount { get; set; }
