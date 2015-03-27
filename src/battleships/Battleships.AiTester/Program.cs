@@ -50,7 +50,7 @@ namespace Battleships.AiTester
 
 		private static void WriteTestInfo(Test test, Logger resultsLogger)
 		{
-			var shipSizes = test.ShipSizes.Aggregate("Ships: ", (a, b) => a + " " + b);
+			var shipSizes = test.ShipSizes.OrderBy(x => x).Aggregate("Ships: ", (a, b) => a + " " + b);
 			Console.WriteLine("Game Count: {0}", test.GamesCount);
 			Console.WriteLine("Width: {0}", test.MapWidth);
 			Console.WriteLine("Height: {0}", test.MapHeight);
